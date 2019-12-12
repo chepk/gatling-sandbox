@@ -1,0 +1,10 @@
+/gatling/.idea
+*.class
+*.log
+/gatling/project/target/
+/gatling/project/project/
+/gatling/target/
+/gatling/.bash_history
+/gatling/.ivy2/
+/gatling/.sbt/
+/data/

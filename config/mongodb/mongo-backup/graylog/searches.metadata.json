@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"graylog.searches"},{"v":2,"key":{"created_at":1},"name":"created_at_1","ns":"graylog.searches"}],"uuid":"35dc808450354524a91f0a34aeb7c964"}

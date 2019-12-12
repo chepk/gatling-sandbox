@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="GELF" class="de.siegmar.logbackgelf.GelfTcpAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <graylogHost>graylog</graylogHost>
+        <graylogPort>12201</graylogPort>
+        <connectTimeout>15000</connectTimeout>
+        <reconnectInterval>300</reconnectInterval>
+        <maxRetries>2</maxRetries>
+        <retryDelay>3000</retryDelay>
+        <poolSize>2</poolSize>
+        <poolMaxWaitTime>5000</poolMaxWaitTime>
+        <encoder class="de.siegmar.logbackgelf.GelfEncoder">
+            <includeRawMessage>false</includeRawMessage>
+            <includeMarker>true</includeMarker>
+            <includeMdcData>true</includeMdcData>
+            <includeCallerData>false</includeCallerData>
+            <includeRootCauseData>false</includeRootCauseData>
+            <includeLevelName>false</includeLevelName>
+            <shortPatternLayout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>computerdatabase</pattern>
+            </shortPatternLayout>
+            <fullPatternLayout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>%d{HH:mm:ss.SSS} %logger{15} - %msg%n%rEx</pattern>
+            </fullPatternLayout>
+            <numbersAsString>false</numbersAsString>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC GELF" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="GELF"/>
+    </appender>
+
+    <logger name="io.gatling.http.engine.response.DefaultStatsProcessor" level="DEBUG"/>
+
+    <root level="ERROR">
+        <appender-ref ref="ASYNC GELF"/>
+    </root>
+
+</configuration>

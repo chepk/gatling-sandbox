@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"graylog.traffic"},{"v":2,"unique":true,"key":{"bucket":1},"name":"bucket_1","ns":"graylog.traffic"}],"uuid":"2355274bf74846b2808b07d07c047496"}

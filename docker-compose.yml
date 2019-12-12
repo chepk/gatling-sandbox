@@ -1,0 +1,102 @@
+version: '3.7'
+services:
+
+  mongo:
+    image: 'mongo:3'
+    container_name: mongo
+    volumes:
+      - mongo_data:/data/db
+      - ./config/mongodb/mongo:/docker-entrypoint-initdb.d
+      - ./config/mongodb/mongo-backup:/home/backup
+    networks:  
+      - network 
+      
+  elasticsearch:
+    image: 'docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.2'
+    container_name: elasticsearch
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    environment:
+      - http.host=0.0.0.0
+      - transport.host=localhost
+      - network.host=0.0.0.0
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+    networks:  
+      - network  
+        
+  graylog:
+    image: 'graylog/graylog:3.1'
+    container_name: graylog
+    volumes:
+      - graylog_journal:/usr/share/graylog/data/journal
+      - ./config/graylog/node-id:/usr/share/graylog/data/config/node-id
+    environment:
+      - GRAYLOG_PASSWORD_SECRET=somepasswordpepper
+      - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+      - GRAYLOG_HTTP_EXTERNAL_URI=http://127.0.0.1:9001/
+    depends_on:
+      - mongo
+      - elasticsearch
+    ports:
+      - 9001:9000
+      - 1514:1514
+      - 1514:1514/udp
+      - 12201:12201
+      - 12201:12201/udp
+    networks:
+      - network
+        
+  influxdb:
+    image: influxdb
+    container_name: influxdb
+    environment:
+      - INFLUXDB_CONFIG_PATH=/tmp/influxdb/influxdb.conf
+      - INFLUXDB_DB=test
+    volumes:
+      - ./config/influxdb:/tmp/influxdb
+      - ./data/influxdb:/var/lib/influxdb
+    ports:
+      - 8086:8086
+      - 2003:2003
+    networks:
+      - network
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    depends_on:
+        - influxdb
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_INSTALL_PLUGINS=michaeldmoore-multistat-panel,grafana-piechart-panel
+    volumes:
+      - ./data/grafana:/var/lib/grafana
+      - ./config/grafana/datasources:/etc/grafana/provisioning/datasources
+      - ./config/grafana/dashboards:/etc/grafana/provisioning/dashboards
+    ports:
+      - 3000:3000
+    networks:
+      - network
+
+  chronograf:
+    image: chronograf
+    container_name: chronograf
+    depends_on:
+      - influxdb
+    command:
+      - chronograf
+      - --influxdb-url=http://influxdb:8086
+    ports:
+      - 8888:8888
+    networks:
+      - network   
+        
+networks:
+  network:
+    name: gatling-sandbox
+    
+volumes:
+  mongo_data:
+  es_data:
+  graylog_journal:

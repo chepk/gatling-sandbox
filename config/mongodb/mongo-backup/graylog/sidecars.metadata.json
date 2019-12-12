@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"graylog.sidecars"},{"v":2,"unique":true,"key":{"node_id":1},"name":"node_id_1","ns":"graylog.sidecars"}],"uuid":"316c85c176084545a2bfa585b7a33f50"}

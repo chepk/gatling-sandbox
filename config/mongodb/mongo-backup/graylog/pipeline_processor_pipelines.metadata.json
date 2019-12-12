@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"graylog.pipeline_processor_pipelines"},{"v":2,"unique":true,"key":{"title":1},"name":"title_1","ns":"graylog.pipeline_processor_pipelines"}],"uuid":"14f9c9f4a62241df927c9d912601b9ca"}
