@@ -71,7 +71,7 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_INSTALL_PLUGINS=michaeldmoore-multistat-panel,grafana-piechart-panel
     volumes:
-      - ./data/grafana:/var/lib/grafana
+      - grafana_data:/var/lib/grafana
       - ./config/grafana/datasources:/etc/grafana/provisioning/datasources
       - ./config/grafana/dashboards:/etc/grafana/provisioning/dashboards
     ports:
@@ -100,3 +100,4 @@ volumes:
   mongo_data:
   es_data:
   graylog_journal:
+  grafana_data:
